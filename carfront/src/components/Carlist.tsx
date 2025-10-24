@@ -106,7 +106,7 @@ function Carlist () {
           columns={columns}
           getRowId={row => row._links.self.href}
           slots={{toolbar: GridToolbar}}
-          />
+        />
         <Snackbar
           open={open}
           autoHideDuration={2000}

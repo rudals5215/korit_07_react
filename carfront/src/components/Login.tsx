@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import axios from "axios";
-import { Button, TextField, Stack } from "@mui/material";
+import { Button, TextField, Stack, Snackbar } from "@mui/material";
+import Carlist from "./Carlist";
 
 type User = {
   username : string;
@@ -15,6 +16,8 @@ function Login() {
   }) ;
 
   const [ isAuthenticated, setAuth ] = useState(false);
+
+  const [ open, setOpen ] = useState(false);
 
   const handleChange = (event : ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -36,23 +39,36 @@ function Login() {
     })
     .catch(err => {console.log(err)});
   }
-  
-  return (
-    <Stack spacing={2} alignItems="center" mt={2}>
-      <TextField 
-        name="username"
-        label="Username"
-        onChange={handleChange}
-      />
-      <TextField 
-        type="password"
-        name="password"
-        label="Password"
-        onChange={handleChange}
-      />
-      <Button variant="outlined" color="primary" onClick={handleLogin}>Login</Button>
-    </Stack>
-  );
+
+  if (isAuthenticated) {
+    return <Carlist />
+  }
+  else {
+    return (
+      <>
+        <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+        message='로그인 실패(ID 혹은 PW가 틀렸습니다.)'
+        />
+        <Stack spacing={2} alignItems="center" mt={10}>
+          <TextField 
+            name="username"
+            label="Username"
+            onChange={handleChange}
+          />
+          <TextField 
+            type="password"
+            name="password"
+            label="Password"
+            onChange={handleChange}
+          />
+          <Button variant="outlined" color="primary" onClick={handleLogin}>Login</Button>
+        </Stack>
+      </>
+    );
+  }
 }
 
 export default Login;
